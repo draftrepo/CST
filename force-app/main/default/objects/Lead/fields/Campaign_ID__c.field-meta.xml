@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Campaign_ID__c</fullName>
+    <description>Unique numeric ID from Google Ads</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Unique numeric ID from Google Ads</inlineHelpText>
+    <label>Campaign ID</label>
+    <length>255</length>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

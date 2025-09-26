@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Disqualification_Reason__c</fullName>
+    <label>Disqualification Reason</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>No Budget</fullName>
+                <default>false</default>
+                <label>No Budget</label>
+            </value>
+            <value>
+                <fullName>Out of Area</fullName>
+                <default>false</default>
+                <label>Out of Area</label>
+            </value>
+            <value>
+                <fullName>Not a Target Industry</fullName>
+                <default>false</default>
+                <label>Not a Target Industry</label>
+            </value>
+            <value>
+                <fullName>Existing Supplier Contract</fullName>
+                <default>false</default>
+                <label>Existing Supplier Contract</label>
+            </value>
+            <value>
+                <fullName>Requirement Outside Scope</fullName>
+                <default>false</default>
+                <label>Requirement Outside Scope</label>
+            </value>
+            <value>
+                <fullName>Duplicate Lead</fullName>
+                <default>false</default>
+                <label>Duplicate Lead</label>
+            </value>
+            <value>
+                <fullName>No Response After Multiple Attempts</fullName>
+                <default>false</default>
+                <label>No Response After Multiple Attempts</label>
+            </value>
+            <value>
+                <fullName>Not Decision Maker / No Authority</fullName>
+                <default>false</default>
+                <label>Not Decision Maker / No Authority</label>
+            </value>
+            <value>
+                <fullName>Timescale Too Distant</fullName>
+                <default>false</default>
+                <label>Timescale Too Distant</label>
+            </value>
+            <value>
+                <fullName>Poor Lead Quality / Spam</fullName>
+                <default>false</default>
+                <label>Poor Lead Quality / Spam</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

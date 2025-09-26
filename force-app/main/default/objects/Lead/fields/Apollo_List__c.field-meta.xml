@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Apollo_List__c</fullName>
+    <description>Custom field in Apollo, used to house Lead in a Salesforce Campaign</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Custom field in Apollo, used to house Lead in a Salesforce Campaign</inlineHelpText>
+    <label>Apollo List</label>
+    <length>255</length>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

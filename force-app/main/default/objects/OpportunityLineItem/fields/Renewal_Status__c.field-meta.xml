@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Renewal_Status__c</fullName>
+    <description>Denotes whether the Opp Line will be part of any renewal Opportunity (Defaults From Product)</description>
+    <label>Renewal Status</label>
+    <required>false</required>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Renews</fullName>
+                <default>false</default>
+                <label>Renews</label>
+            </value>
+            <value>
+                <fullName>Does Not Renew</fullName>
+                <default>false</default>
+                <label>Does Not Renew</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

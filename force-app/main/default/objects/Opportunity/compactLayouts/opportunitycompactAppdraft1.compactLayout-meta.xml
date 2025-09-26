@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CompactLayout xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>opportunitycompactAppdraft1</fullName>
+    <fields>Name</fields>
+    <fields>OwnerId</fields>
+    <fields>AccountId</fields>
+    <fields>Amount</fields>
+    <fields>CloseDate</fields>
+    <label>opportunitycompactAppdraft1</label>
+</CompactLayout>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Renewal_Opp_Requires_Date</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(ISPICKVAL( Create_Renewal__c ,&quot;Yes&quot;), ISNULL(Renewal_Date__c))</errorConditionFormula>
+    <errorDisplayField>Renewal_Date__c</errorDisplayField>
+    <errorMessage>Set a value for the Renewal Date if setting &apos;Create Renewal&apos; to &apos;Yes&apos;</errorMessage>
+</ValidationRule>
