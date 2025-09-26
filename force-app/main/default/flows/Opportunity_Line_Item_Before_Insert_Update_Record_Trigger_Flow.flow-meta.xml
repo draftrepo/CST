@@ -14,6 +14,13 @@
                 <elementReference>$Record.Product2.Renewal_Status__c</elementReference>
             </value>
         </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Commission_Eligible__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.Product2.Commission_Eligible__c</elementReference>
+            </value>
+        </assignmentItems>
     </assignments>
     <decisions>
         <name>Which_Action</name>
