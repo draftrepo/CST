@@ -1,0 +1,374 @@
+/* Commission Creator Component Styles */
+
+/* Matrix Table Styles */
+.matrix-container {
+    position: relative;
+    overflow: auto;
+    max-height: 500px;
+    border: 1px solid rgb(221, 219, 218);
+    border-radius: 0.25rem;
+    background-color: white;
+}
+
+.matrix-table {
+    min-width: 100%;
+}
+
+.matrix-table thead {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: rgb(250, 250, 249);
+}
+
+.matrix-table thead th {
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.0625rem;
+    padding: 0.5rem 1rem;
+    white-space: nowrap;
+    border-bottom: 2px solid rgb(221, 219, 218);
+}
+
+.matrix-table tbody tr {
+    transition: background-color 0.1s ease;
+}
+
+.matrix-table tbody tr:hover {
+    background-color: rgb(250, 250, 249);
+}
+
+.matrix-table tbody td {
+    padding: 0.5rem;
+    vertical-align: middle;
+}
+
+/* Checkbox Cell Styles */
+.checkbox-cell {
+    text-align: center;
+    width: 120px;
+    position: relative;
+}
+
+.checkbox-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.25rem;
+}
+
+/* Selected Cell Highlight */
+.checkbox-cell.is-selected {
+    background-color: rgb(243, 252, 246);
+    position: relative;
+}
+
+.checkbox-cell.is-selected::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background-color: rgb(46, 132, 74);
+}
+
+/* Percentage Input Styles */
+.percentage-input-wrapper {
+    display: flex;
+    align-items: center;
+    margin-top: 0.5rem;
+}
+
+.percentage-input {
+    max-width: 80px;
+}
+
+.percentage-input input {
+    text-align: center;
+    padding: 0.25rem;
+}
+
+/* Commission Amount Display */
+.commission-amount {
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: rgb(46, 132, 74);
+}
+
+/* Product Row Styles */
+.product-header {
+    font-weight: 600;
+    position: sticky;
+    left: 0;
+    background-color: white;
+    z-index: 5;
+    min-width: 200px;
+}
+
+.product-header.is-sticky {
+    box-shadow: 2px 0 4px rgba(0,0,0,0.1);
+}
+
+.product-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.product-name {
+    font-weight: 600;
+    color: rgb(22, 50, 92);
+}
+
+.product-details {
+    font-size: 0.75rem;
+    color: rgb(107, 109, 112);
+}
+
+.margin-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.125rem 0.5rem;
+    background-color: rgb(243, 252, 246);
+    color: rgb(46, 132, 74);
+    border-radius: 0.75rem;
+    font-weight: 600;
+    font-size: 0.75rem;
+}
+
+/* Summary Panel Styles */
+.summary-card {
+    background: linear-gradient(135deg, rgb(250, 250, 249) 0%, white 100%);
+    border: 1px solid rgb(221, 219, 218);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.summary-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, rgb(0, 112, 210) 0%, rgb(1, 68, 134) 100%);
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgb(236, 235, 234);
+}
+
+.summary-item:last-child {
+    border-bottom: none;
+    padding-top: 1rem;
+    margin-top: 0.5rem;
+    border-top: 2px solid rgb(221, 219, 218);
+}
+
+.summary-label {
+    color: rgb(107, 109, 112);
+    font-size: 0.875rem;
+    font-weight: 400;
+}
+
+.summary-value {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: rgb(22, 50, 92);
+}
+
+.summary-value.total-amount {
+    color: rgb(46, 132, 74);
+    font-size: 1.5rem;
+}
+
+/* Action Button Styles */
+.generate-button {
+    min-width: 200px;
+    height: 48px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.0625rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: all 0.2s ease;
+}
+
+.generate-button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* Loading & Processing States */
+.processing-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.9);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.processing-message {
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    color: rgb(107, 109, 112);
+    text-align: center;
+}
+
+/* Duplicate Options Modal */
+.duplicate-modal {
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.duplicate-options-card {
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    padding: 2rem;
+}
+
+/* Empty State Styles */
+.empty-state {
+    padding: 3rem;
+    text-align: center;
+}
+
+.empty-state-icon {
+    margin-bottom: 1.5rem;
+    opacity: 0.5;
+}
+
+.empty-state-title {
+    color: rgb(62, 62, 60);
+    margin-bottom: 0.5rem;
+}
+
+.empty-state-message {
+    color: rgb(107, 109, 112);
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .matrix-container {
+        max-height: 400px;
+    }
+    
+    .summary-card {
+        margin-bottom: 1rem;
+    }
+    
+    .generate-button {
+        width: 100%;
+    }
+}
+
+/* Animation Classes */
+.fade-in {
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.slide-up {
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Status Indicators */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.0625rem;
+}
+
+.status-badge.draft {
+    background-color: rgb(254, 241, 214);
+    color: rgb(169, 100, 0);
+}
+
+.status-badge.approved {
+    background-color: rgb(213, 236, 254);
+    color: rgb(0, 68, 158);
+}
+
+.status-badge.paid {
+    background-color: rgb(243, 252, 246);
+    color: rgb(46, 132, 74);
+}
+
+/* Hover Effects */
+.hover-highlight:hover {
+    background-color: rgb(250, 250, 249);
+    transition: background-color 0.15s ease;
+}
+
+/* Focus States */
+.percentage-input input:focus {
+    outline: 0;
+    border-color: rgb(0, 112, 210);
+    box-shadow: 0 0 3px rgb(0, 112, 210, 0.3);
+}
+
+/* Utility Classes */
+.truncate-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.no-wrap {
+    white-space: nowrap;
+}
+
+.sticky-column {
+    position: sticky;
+    left: 0;
+    background-color: white;
+    z-index: 5;
+}

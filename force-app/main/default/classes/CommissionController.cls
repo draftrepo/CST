@@ -115,7 +115,7 @@ public with sharing class CommissionController {
                 teamData.userId = member.UserId;
                 teamData.name = member.User.Name;
                 teamData.role = member.TeamMemberRole;
-                teamData.defaultRate = member.User.Default_Commission_Rate__c != null ? 
+                teamData.defaultRate = member.User.Default_Commission_Rate__c != null ?
                     member.User.Default_Commission_Rate__c : 0;
                 result.teamMembers.add(teamData);
             }
@@ -183,10 +183,18 @@ public with sharing class CommissionController {
                 return result;
             }
             
+            // Get OpportunityLineItems to access margin data for Gross_Margin__c field
+            Map<Id, OpportunityLineItem> lineItemMap = new Map<Id, OpportunityLineItem>([
+                SELECT Id, Line_Margin__c
+                FROM OpportunityLineItem 
+                WHERE OpportunityId = :opportunityId
+            ]);
+            
             // Get existing commissions for this opportunity
             Map<String, Commission__c> existingCommissionMap = new Map<String, Commission__c>();
             List<Commission__c> existingCommissions = [
-                SELECT Id, OpportunityLineItem__c, User__c, Commission_Percentage__c, Commission_Amount__c
+                SELECT Id, OpportunityLineItem__c, User__c, Commission_Percentage__c, 
+                       Commission_Amount__c, Gross_Margin__c
                 FROM Commission__c 
                 WHERE Opportunity__c = :opportunityId
             ];
@@ -202,6 +210,9 @@ public with sharing class CommissionController {
             for (MatrixCellData cell : selectedCells) {
                 String key = cell.lineItemId + '_' + cell.userId;
                 Commission__c commission;
+                
+                // Get the line item for margin data
+                OpportunityLineItem lineItem = lineItemMap.get(cell.lineItemId);
                 
                 if (existingCommissionMap.containsKey(key)) {
                     // Update existing commission
@@ -222,6 +233,10 @@ public with sharing class CommissionController {
                 if (cell.percentage != null) {
                     commission.Commission_Percentage__c = cell.percentage;
                 }
+                
+                // Set the gross margin from the line item
+                commission.Gross_Margin__c = lineItem != null && lineItem.Line_Margin__c != null ? 
+                    lineItem.Line_Margin__c : 0;
                 
                 commissionsToUpsert.add(commission);
             }

@@ -74,7 +74,7 @@ export default class CommissionCreator extends NavigationMixin(LightningElement)
             this.opportunityData.teamMembers?.forEach(teamMember => {
                 const existingCommission = this.findExistingCommission(lineItem.Id, teamMember.userId);
                 
-                // FIXED: Handle percentage conversion properly
+                // Handle percentage conversion properly
                 let percentageValue = teamMember.defaultRate || 0;
                 if (existingCommission && existingCommission.Commission_Percentage__c !== undefined) {
                     let commissionPercentage = existingCommission.Commission_Percentage__c;
@@ -91,18 +91,18 @@ export default class CommissionCreator extends NavigationMixin(LightningElement)
                     console.log(`Converted to display percentage: ${percentageValue}%`);
                 }
                 
-                // FIXED: Access the correct property names from Apex response
+                // Access the correct property names from Apex response
                 const cell = {
                     id: `${lineItem.Id}-${teamMember.userId}`,
                     lineItemId: lineItem.Id,
                     userId: teamMember.userId,
-                    lineItemName: lineItem.Product2?.Name || lineItem.Name,  // FIXED: Get product name correctly
+                    lineItemName: lineItem.Product2?.Name || lineItem.Name,
                     teamMemberName: teamMember.name,
                     teamMemberRole: teamMember.role,
-                    lineMargin: lineItem.Line_Margin__c || 0,  // FIXED: Use correct field name from Apex
+                    lineMargin: lineItem.Line_Margin__c || 0,
                     selected: existingCommission ? true : false,
                     percentage: percentageValue,
-                    defaultPercentage: teamMember.defaultRate || 0, // Store default rate for Select All
+                    defaultPercentage: teamMember.defaultRate || 0,
                     amount: 0,
                     existingCommissionId: existingCommission?.Id || null
                 };
@@ -128,6 +128,11 @@ export default class CommissionCreator extends NavigationMixin(LightningElement)
         this.initializeMatrix();
     }
 
+    handleCancel() {
+        this.showDuplicateOptions = false;
+        this.closeFlowAndRefresh();
+    }
+
     async handleDeleteAndRecreate() {
         try {
             this.isProcessing = true;
@@ -149,7 +154,7 @@ export default class CommissionCreator extends NavigationMixin(LightningElement)
     }
 
     // Matrix interaction handlers
-    handleCellSelection(event) {
+    handleCheckboxChange(event) {
         const lineItemId = event.target.dataset.lineItemId || event.target.getAttribute('data-line-item-id');
         const userId = event.target.dataset.userId || event.target.getAttribute('data-user-id');
         const isChecked = event.target.checked;
@@ -159,7 +164,7 @@ export default class CommissionCreator extends NavigationMixin(LightningElement)
         console.log('Full dataset:', JSON.stringify(event.target.dataset));
         
         if (!lineItemId || !userId) {
-            console.error('Missing data attributes in handleCellSelection');
+            console.error('Missing data attributes in handleCheckboxChange');
             console.error('lineItemId:', lineItemId, 'userId:', userId);
             return;
         }
@@ -176,6 +181,11 @@ export default class CommissionCreator extends NavigationMixin(LightningElement)
         this.matrixData = newMatrix;
         this.calculateTotals();
         this.forceRefresh();
+    }
+
+    // Alias for HTML template compatibility
+    handleCellSelection(event) {
+        this.handleCheckboxChange(event);
     }
 
     handlePercentageChange(event) {
@@ -400,6 +410,29 @@ export default class CommissionCreator extends NavigationMixin(LightningElement)
         return this.opportunityData.opportunity?.Name || 'Loading...';
     }
 
+    // FIXED: Added getters for badge labels
+    get productCountLabel() {
+        const count = this.lineItems.length;
+        return `${count} Product${count !== 1 ? 's' : ''}`;
+    }
+
+    get teamMemberCountLabel() {
+        const count = this.teamMembers.length;
+        return `${count} Team Member${count !== 1 ? 's' : ''}`;
+    }
+
+    // FIXED: Added getter for formatted opportunity amount
+    get formattedOpportunityAmount() {
+        return this.opportunityData?.opportunity?.Amount 
+            ? this.formatCurrency(this.opportunityData.opportunity.Amount)
+            : '';
+    }
+
+    // FIXED: Added getter for opportunity currency - CHANGED USD TO GBP
+    get opportunityCurrency() {
+        return this.opportunityData.opportunity?.CurrencyIsoCode || 'GBP';
+    }
+
     get lineItems() {
         console.log('Getting lineItems:', this.opportunityData.lineItems);
         // Add formatted margin to each line item
@@ -429,15 +462,24 @@ export default class CommissionCreator extends NavigationMixin(LightningElement)
                 selected: cell.selected,
                 percentage: cell.percentage,
                 amount: cell.amount,
-                formattedAmount: this.formatCurrency(cell.amount)
+                formattedAmount: this.formatCurrency(cell.amount),
+                match: true,
+                key: cell.id
             };
         }
         return { 
             selected: false, 
             percentage: 0, 
             amount: 0, 
-            formattedAmount: this.formatCurrency(0) 
+            formattedAmount: this.formatCurrency(0),
+            match: false,
+            key: `${lineItemId}_${userId}`
         };
+    }
+
+    // NEW: Helper method to get cell ID for template
+    getCellId(lineItemId, userId) {
+        return `cell_${lineItemId}_${userId}`;
     }
     
     // Create a computed property for the matrix display
@@ -472,9 +514,9 @@ export default class CommissionCreator extends NavigationMixin(LightningElement)
         return display;
     }
 
-    // Format currency for display - FIXED to use proper currency symbol
+    // Format currency for display - FIXED to use proper currency symbol and respect opportunity currency
     formatCurrency(amount) {
-        const currencyCode = this.opportunityData.opportunity?.CurrencyIsoCode || 'USD';
+        const currencyCode = this.opportunityData.opportunity?.CurrencyIsoCode || 'GBP';
         
         // Map currency codes to their locale formats
         const currencyLocaleMap = {
