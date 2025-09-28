@@ -1,0 +1,244 @@
+<template>
+    <!-- Loading Spinner -->
+    <template if:true={isLoading}>
+        <div class="slds-var-p-around_large slds-text-align_center">
+            <lightning-spinner alternative-text="Loading commission data..." size="large"></lightning-spinner>
+            <p class="slds-var-m-top_small">Loading opportunity data...</p>
+        </div>
+    </template>
+
+    <!-- Error State -->
+    <template if:true={error}>
+        <div class="slds-var-p-around_medium">
+            <div class="slds-notification slds-notification_alert slds-notification_alert--error">
+                <div class="slds-notification__body">
+                    <h2 class="slds-text-heading_small">Error Loading Data</h2>
+                    <p>{error}</p>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Duplicate Commission Options -->
+    <template if:true={showDuplicateOptions}>
+        <div class="slds-var-p-around_large slds-text-align_center">
+            <div class="slds-modal-container slds-var-p-around_large" style="max-width: 600px; margin: 0 auto;">
+                <div class="slds-box slds-theme_default slds-var-p-around_large">
+                    <div class="slds-text-align_center">
+                        <lightning-icon icon-name="utility:warning" variant="warning" size="large" class="slds-var-m-bottom_small"></lightning-icon>
+                        <h2 class="slds-text-heading_medium slds-var-m-bottom_medium">Existing Commissions Found</h2>
+                        <p class="slds-text-body_regular slds-var-m-bottom_large">
+                            This opportunity already has <strong>{existingCommissions.length}</strong> commission record(s). 
+                            How would you like to proceed?
+                        </p>
+                        <div class="slds-grid slds-grid_align-center slds-gutters slds-var-m-top_large">
+                            <div class="slds-col">
+                                <lightning-button 
+                                    label="Edit Existing Commissions" 
+                                    variant="brand"
+                                    onclick={handleEditExisting}
+                                    class="slds-var-m-right_small">
+                                </lightning-button>
+                            </div>
+                            <div class="slds-col">
+                                <lightning-button 
+                                    label="Delete & Start Fresh" 
+                                    variant="destructive"
+                                    onclick={handleDeleteAndRecreate}
+                                    disabled={isProcessing}>
+                                </lightning-button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Main Commission Matrix -->
+    <template if:true={hasData}>
+        <template if:false={showDuplicateOptions}>
+            <div class="slds-var-p-around_medium">
+                
+                <!-- Header Information -->
+                <div class="slds-var-m-bottom_large">
+                    <h1 class="slds-text-heading_medium slds-var-m-bottom_small">
+                        Commission Creator: {opportunityName}
+                    </h1>
+                    <p class="slds-text-body_regular slds-text-color_weak">
+                        Select which team members should receive commissions on which products. 
+                        Commission rates can be adjusted per product.
+                    </p>
+                </div>
+
+                <!-- Commission Matrix Table -->
+                <div class="commission-matrix slds-var-m-bottom_large">
+                    <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped">
+                        <thead>
+                            <tr class="slds-line-height_reset">
+                                <th class="slds-text-title_caps product-column" scope="col">
+                                    <div class="slds-truncate">Product / Line Item</div>
+                                </th>
+                                <template for:each={teamMembers} for:item="teamMember">
+                                    <th key={teamMember.userId} class="slds-text-title_caps team-member-column" scope="col">
+                                        <div class="slds-text-align_center">
+                                            <div class="slds-truncate slds-text-heading_small">
+                                                {teamMember.name}
+                                            </div>
+                                            <div class="slds-text-body_small slds-text-color_weak">
+                                                {teamMember.role}
+                                            </div>
+                                            <div class="slds-text-body_small slds-text-color_weak">
+                                                Default: {teamMember.defaultRate}%
+                                            </div>
+                                            <div class="slds-var-m-top_x-small">
+                                                <lightning-input 
+                                                    type="checkbox"
+                                                    label="Select All Products"
+                                                    variant="label-hidden"
+                                                    data-user-id={teamMember.userId}
+                                                    onchange={handleSelectAllForTeamMember}>
+                                                </lightning-input>
+                                                <span class="slds-text-body_small">Select All Products</span>
+                                            </div>
+                                        </div>
+                                    </th>
+                                </template>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={matrixDisplay} for:item="row">
+                                <tr key={row.lineItem.Id} class="slds-hint-parent">
+                                    <td class="product-column">
+                                        <div class="slds-truncate">
+                                            <div class="slds-text-heading_small">{row.lineItem.Product2.Name}</div>
+                                            <div class="slds-text-body_small slds-text-color_weak">
+                                                Margin: {row.lineItem.formattedMargin}
+                                            </div>
+                                            <div class="slds-var-m-top_x-small">
+                                                <div class="slds-grid slds-grid_align-start slds-gutters_xx-small">
+                                                    <div class="slds-col slds-shrink-none">
+                                                        <lightning-input 
+                                                            type="checkbox"
+                                                            label="Select All Team Members"
+                                                            variant="label-hidden"
+                                                            data-line-item-id={row.lineItem.Id}
+                                                            onchange={handleSelectAllForLineItem}>
+                                                        </lightning-input>
+                                                    </div>
+                                                    <div class="slds-col">
+                                                        <span class="slds-text-body_small">Select All Team Members</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <template for:each={row.cells} for:item="cell">
+                                        <td key={cell.userId} class="team-member-column">
+                                            <div class="commission-cell slds-text-align_center slds-var-p-around_x-small">
+                                                <div class="slds-grid slds-grid_align-center slds-grid_vertical-align-center slds-wrap">
+                                                    <div class="slds-col slds-size_2-of-12">
+                                                        <lightning-input 
+                                                            type="checkbox"
+                                                            variant="label-hidden"
+                                                            checked={cell.selected}
+                                                            data-line-item-id={cell.lineItemId}
+                                                            data-user-id={cell.userId}
+                                                            onchange={handleCellSelection}>
+                                                        </lightning-input>
+                                                    </div>
+                                                    <div class="slds-col slds-size_6-of-12">
+                                                        <lightning-input 
+                                                            type="number"
+                                                            variant="label-hidden"
+                                                            placeholder="0"
+                                                            value={cell.percentage}
+                                                            step="0.01"
+                                                            min="0"
+                                                            max="100"
+                                                            data-line-item-id={cell.lineItemId}
+                                                            data-user-id={cell.userId}
+                                                            onchange={handlePercentageChange}
+                                                            class="percentage-input">
+                                                        </lightning-input>
+                                                    </div>
+                                                    <div class="slds-col slds-size_2-of-12 slds-text-align_left">
+                                                        <span class="slds-text-body_regular">%</span>
+                                                    </div>
+                                                </div>
+                                                <div class="slds-var-m-top_x-small">
+                                                    <span class="slds-text-body_small slds-text-color_success">
+                                                        {cell.formattedAmount}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </template>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Summary Panel -->
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2">
+                        <div class="slds-box slds-theme_shade">
+                            <h3 class="slds-text-heading_small slds-var-m-bottom_small">Commission Summary</h3>
+                            <div class="slds-var-m-bottom_small">
+                                <span class="slds-text-body_small slds-text-color_weak">Total Commission Records: </span>
+                                <span class="slds-text-heading_small">{totalCommissions}</span>
+                            </div>
+                            <div>
+                                <span class="slds-text-body_small slds-text-color_weak">Total Commission Amount: </span>
+                                <span class="slds-text-heading_small slds-text-color_success">
+                                    <strong>{formattedTotalAmount}</strong>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2">
+                        <div class="slds-text-align_center">
+                            <lightning-button 
+                                label="Generate Commissions"
+                                variant="brand"
+                                onclick={handleGenerateCommissions}
+                                disabled={buttonDisabled}
+                                class="slds-var-m-top_medium generate-button">
+                            </lightning-button>
+                            <template if:true={isProcessing}>
+                                <div class="slds-var-m-top_small">
+                                    <lightning-spinner alternative-text="Processing..." size="small"></lightning-spinner>
+                                    <p class="slds-text-body_small">Creating commission records...</p>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </template>
+    </template>
+
+    <!-- No Data State -->
+    <template if:false={hasData}>
+        <template if:false={isLoading}>
+            <template if:false={showDuplicateOptions}>
+                <div class="slds-var-p-around_large slds-text-align_center">
+                    <div class="slds-illustration slds-illustration_small">
+                        <img src="/img/misc/no-access.svg" alt="No data" />
+                        <div class="slds-text-longform">
+                            <h3 class="slds-text-heading_medium">No Commission Data Available</h3>
+                            <p class="slds-var-m-top_small">
+                                This opportunity either has no commission-eligible line items with positive margins, 
+                                or no team members assigned.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </template>
+    </template>
+
+</template>

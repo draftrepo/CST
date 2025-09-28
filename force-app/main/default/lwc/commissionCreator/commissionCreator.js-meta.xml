@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>64.0</apiVersion>
+    <description>Commission Creator Matrix Component for Bulk Commission Generation</description>
+    <isExposed>true</isExposed>
+    <masterLabel>Commission Creator</masterLabel>
+    <targets>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+            <property name="opportunityId" type="String" label="Opportunity ID" description="The ID of the opportunity to create commissions for" required="true"/>
+            <property name="commissionsCreated" type="String" label="Commissions Created Count" description="Number of commission records created (output)" role="outputOnly"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>
