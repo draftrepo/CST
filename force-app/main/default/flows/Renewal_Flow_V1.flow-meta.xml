@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionCalls>
+        <description>Invokes the Apex class to clone revenue schedules from the original opportunity line items to the renewal opportunity line items, preserving payment patterns and timing</description>
         <name>Create_OpportunityLineItemSchedule</name>
-        <label>Create OpportunityLineItemSchedule</label>
+        <label>Create Revenue Schedules</label>
         <locationX>176</locationX>
         <locationY>1163</locationY>
         <actionName>OpptyLineItemSchedulerGenerator</actionName>
@@ -17,7 +18,7 @@
         <inputParameters>
             <name>opportunityId</name>
             <value>
-                <elementReference>nOppty.Id</elementReference>
+                <elementReference>varRenewalOpportunity.Id</elementReference>
             </value>
         </inputParameters>
         <nameSegment>OpptyLineItemSchedulerGenerator</nameSegment>
@@ -26,15 +27,16 @@
     <apiVersion>61.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
+        <description>Adds the current product to the collection that will be bulk inserted</description>
         <name>Add_to_Collection</name>
-        <label>Add to Collection</label>
+        <label>Add Product to Collection</label>
         <locationX>264</locationX>
         <locationY>863</locationY>
         <assignmentItems>
-            <assignToReference>nOpptyProductsForCreation</assignToReference>
+            <assignToReference>varRenewalProductsCollection</assignToReference>
             <operator>Add</operator>
             <value>
-                <elementReference>nOpptyProduct</elementReference>
+                <elementReference>varSingleRenewalProduct</elementReference>
             </value>
         </assignmentItems>
         <connector>
@@ -42,43 +44,73 @@
         </connector>
     </assignments>
     <assignments>
+        <description>Sets all required field values for the renewal opportunity based on the original opportunity and business rules</description>
         <name>Assign_New_Oppty</name>
-        <label>Assign New Oppty</label>
+        <label>Set Renewal Opportunity Fields</label>
         <locationX>176</locationX>
         <locationY>323</locationY>
+        <!-- Account stays the same -->
         <assignmentItems>
-            <assignToReference>nOppty.AccountId</assignToReference>
+            <assignToReference>varRenewalOpportunity.AccountId</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>$Record.AccountId</elementReference>
             </value>
         </assignmentItems>
+        <!-- Close date is the renewal date from original opportunity -->
         <assignmentItems>
-            <assignToReference>nOppty.CloseDate</assignToReference>
+            <assignToReference>varRenewalOpportunity.CloseDate</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>$Record.Renewal_Date__c</elementReference>
             </value>
         </assignmentItems>
+        <!-- Set the next renewal date (12 months from this renewal) -->
         <assignmentItems>
-            <assignToReference>nOppty.StageName</assignToReference>
+            <assignToReference>varRenewalOpportunity.Renewal_Date__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>formulaNextRenewalDate</elementReference>
+            </value>
+        </assignmentItems>
+        <!-- Keep the same price book -->
+        <assignmentItems>
+            <assignToReference>varRenewalOpportunity.Pricebook2Id</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.Pricebook2Id</elementReference>
+            </value>
+        </assignmentItems>
+        <!-- Set to Negotiation stage for late-stage forecast visibility -->
+        <assignmentItems>
+            <assignToReference>varRenewalOpportunity.StageName</assignToReference>
             <operator>Assign</operator>
             <value>
                 <stringValue>Negotiation</stringValue>
             </value>
         </assignmentItems>
+        <!-- Set meaningful opportunity name -->
         <assignmentItems>
-            <assignToReference>nOppty.Name</assignToReference>
+            <assignToReference>varRenewalOpportunity.Name</assignToReference>
             <operator>Assign</operator>
             <value>
-                <stringValue>{!$Record.Name} Renewal</stringValue>
+                <elementReference>formulaRenewalOpportunityName</elementReference>
             </value>
         </assignmentItems>
+        <!-- Use Renewal record type if it exists -->
         <assignmentItems>
-            <assignToReference>nOppty.Pricebook2Id</assignToReference>
+            <assignToReference>varRenewalOpportunity.RecordTypeId</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>$Record.Pricebook2Id</elementReference>
+                <elementReference>$Record.RecordTypeId</elementReference>
+            </value>
+        </assignmentItems>
+        <!-- Keep the same owner -->
+        <assignmentItems>
+            <assignToReference>varRenewalOpportunity.OwnerId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.OwnerId</elementReference>
             </value>
         </assignmentItems>
         <connector>
@@ -86,33 +118,41 @@
         </connector>
     </assignments>
     <assignments>
+        <description>Maps fields from the original opportunity product to the new renewal product</description>
         <name>Assign_nOpptyProduct</name>
-        <label>Assign nOpptyProduct</label>
+        <label>Map Product Fields</label>
         <locationX>264</locationX>
         <locationY>755</locationY>
         <assignmentItems>
-            <assignToReference>nOpptyProduct.OpportunityId</assignToReference>
+            <assignToReference>varSingleRenewalProduct.OpportunityId</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>nOppty.Id</elementReference>
+                <elementReference>varRenewalOpportunity.Id</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>nOpptyProduct.Product2Id</assignToReference>
+            <assignToReference>varSingleRenewalProduct.PricebookEntryId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Oppty_Products.PricebookEntryId</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varSingleRenewalProduct.Product2Id</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>Loop_Oppty_Products.Product2Id</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>nOpptyProduct.Quantity</assignToReference>
+            <assignToReference>varSingleRenewalProduct.Quantity</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>Loop_Oppty_Products.Quantity</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>nOpptyProduct.UnitPrice</assignToReference>
+            <assignToReference>varSingleRenewalProduct.UnitPrice</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>Loop_Oppty_Products.UnitPrice</elementReference>
@@ -122,33 +162,82 @@
             <targetReference>Add_to_Collection</targetReference>
         </connector>
     </assignments>
+    <description>Creates renewal opportunities when an opportunity is closed won with Create Renewal = Yes. Clones renewable products and their revenue schedules to support 12-month revenue forecasting.</description>
     <environments>Default</environments>
     <formulas>
-        <name>NewRenewaldate</name>
+        <description>Calculates the next renewal date (12 months from current renewal)</description>
+        <name>formulaNextRenewalDate</name>
         <dataType>Date</dataType>
-        <expression>ADDMONTHS({!$Record.Renewal_Date__c},12)</expression>
+        <expression>ADDMONTHS({!$Record.Renewal_Date__c}, 12)</expression>
     </formulas>
     <formulas>
-        <name>todayPlus365</name>
-        <dataType>Date</dataType>
-        <expression>TODAY()+365</expression>
+        <description>Creates a meaningful name for the renewal opportunity</description>
+        <name>formulaRenewalOpportunityName</name>
+        <dataType>String</dataType>
+        <expression>{!$Record.Account.Name} + " - Renewal - " + TEXT(YEAR({!$Record.Renewal_Date__c}))</expression>
     </formulas>
     <interviewLabel>Renewal Flow V1 {!$Flow.CurrentDateTime}</interviewLabel>
-    <label>Renewal Flow V1</label>
+    <label>Renewal Opportunity Creation</label>
     <loops>
+        <description>Iterates through each product on the original opportunity to check if it should be included in the renewal</description>
         <name>Loop_Oppty_Products</name>
-        <label>Loop Oppty Products</label>
+        <label>Process Each Product</label>
         <locationX>176</locationX>
         <locationY>647</locationY>
         <collectionReference>Get_Oppty_Products</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
-            <targetReference>Assign_nOpptyProduct</targetReference>
+            <targetReference>Check_If_Product_Renews</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
             <targetReference>Create_Oppty_Products</targetReference>
         </noMoreValuesConnector>
     </loops>
+    <decisions>
+        <description>Checks if the current product should be included in the renewal based on Include_in_Renewal__c field</description>
+        <name>Check_If_Product_Renews</name>
+        <label>Should Product Be Renewed?</label>
+        <locationX>264</locationX>
+        <locationY>700</locationY>
+        <defaultConnectorLabel>Do Not Renew</defaultConnectorLabel>
+        <rules>
+            <name>Product_Should_Renew</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_Oppty_Products.Include_in_Renewal__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Yes</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_nOpptyProduct</targetReference>
+            </connector>
+            <label>Include in Renewal</label>
+        </rules>
+        <rules>
+            <name>Skip_Product</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_Oppty_Products.Include_in_Renewal__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>No</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Loop_Oppty_Products.Include_in_Renewal__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Loop_Oppty_Products</targetReference>
+            </connector>
+            <label>Skip This Product</label>
+        </rules>
+    </decisions>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -169,28 +258,31 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <recordCreates>
+        <description>Creates the renewal opportunity in Salesforce</description>
         <name>Create_Oppty</name>
-        <label>Create Oppty</label>
+        <label>Create Renewal Opportunity</label>
         <locationX>176</locationX>
         <locationY>431</locationY>
         <connector>
             <targetReference>Get_Oppty_Products</targetReference>
         </connector>
-        <inputReference>nOppty</inputReference>
+        <inputReference>varRenewalOpportunity</inputReference>
     </recordCreates>
     <recordCreates>
+        <description>Bulk creates all renewable products on the new opportunity</description>
         <name>Create_Oppty_Products</name>
-        <label>Create Oppty Products</label>
+        <label>Create Renewal Products</label>
         <locationX>176</locationX>
         <locationY>1055</locationY>
         <connector>
             <targetReference>Create_OpportunityLineItemSchedule</targetReference>
         </connector>
-        <inputReference>nOpptyProductsForCreation</inputReference>
+        <inputReference>varRenewalProductsCollection</inputReference>
     </recordCreates>
     <recordLookups>
+        <description>Retrieves all products from the original opportunity to check which should be renewed</description>
         <name>Get_Oppty_Products</name>
-        <label>Get Oppty Products</label>
+        <label>Get Original Products</label>
         <locationX>176</locationX>
         <locationY>539</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
@@ -237,23 +329,8 @@
     </start>
     <status>Active</status>
     <variables>
-        <name>NewOpportunityLineItemSchedule</name>
-        <dataType>SObject</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-        <objectType>OpportunityLineItemSchedule</objectType>
-    </variables>
-    <variables>
-        <name>NewOpportunityLineItemScheduleList</name>
-        <dataType>SObject</dataType>
-        <isCollection>true</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-        <objectType>OpportunityLineItemSchedule</objectType>
-    </variables>
-    <variables>
-        <name>nOppty</name>
+        <description>Single renewal opportunity record being created</description>
+        <name>varRenewalOpportunity</name>
         <dataType>SObject</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
@@ -261,7 +338,8 @@
         <objectType>Opportunity</objectType>
     </variables>
     <variables>
-        <name>nOpptyProduct</name>
+        <description>Single product being processed for renewal</description>
+        <name>varSingleRenewalProduct</name>
         <dataType>SObject</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
@@ -269,18 +347,12 @@
         <objectType>OpportunityLineItem</objectType>
     </variables>
     <variables>
-        <name>nOpptyProductsForCreation</name>
+        <description>Collection of all products that should be created on the renewal opportunity</description>
+        <name>varRenewalProductsCollection</name>
         <dataType>SObject</dataType>
         <isCollection>true</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
         <objectType>OpportunityLineItem</objectType>
-    </variables>
-    <variables>
-        <name>OppLineItemIds</name>
-        <dataType>String</dataType>
-        <isCollection>true</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
     </variables>
 </Flow>
