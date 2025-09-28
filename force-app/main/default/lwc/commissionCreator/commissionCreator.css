@@ -1,374 +1,279 @@
-/* Commission Creator Component Styles */
+/* Commission Creator Enhanced Styling */
 
-/* Matrix Table Styles */
-.matrix-container {
+/* Matrix Container */
+.commission-matrix {
     position: relative;
-    overflow: auto;
-    max-height: 500px;
-    border: 1px solid rgb(221, 219, 218);
+    overflow-x: auto;
     border-radius: 0.25rem;
-    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.matrix-table {
+/* Matrix Table */
+.commission-matrix .slds-table {
+    font-size: 0.875rem;
     min-width: 100%;
 }
 
-.matrix-table thead {
+.commission-matrix .slds-table thead th {
+    background-color: rgb(243, 243, 243);
+    border-bottom: 2px solid rgb(221, 219, 218);
+    padding: 1rem 0.75rem;
+    font-weight: 700;
     position: sticky;
     top: 0;
     z-index: 10;
-    background-color: rgb(250, 250, 249);
 }
 
-.matrix-table thead th {
-    font-weight: 700;
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    letter-spacing: 0.0625rem;
-    padding: 0.5rem 1rem;
-    white-space: nowrap;
-    border-bottom: 2px solid rgb(221, 219, 218);
-}
-
-.matrix-table tbody tr {
-    transition: background-color 0.1s ease;
-}
-
-.matrix-table tbody tr:hover {
-    background-color: rgb(250, 250, 249);
-}
-
-.matrix-table tbody td {
-    padding: 0.5rem;
+.commission-matrix .slds-table tbody td {
+    padding: 0.75rem;
     vertical-align: middle;
+    border-right: 1px solid rgb(221, 219, 218);
 }
 
-/* Checkbox Cell Styles */
-.checkbox-cell {
-    text-align: center;
-    width: 120px;
-    position: relative;
-}
-
-.checkbox-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 0.25rem;
-}
-
-/* Selected Cell Highlight */
-.checkbox-cell.is-selected {
-    background-color: rgb(243, 252, 246);
-    position: relative;
-}
-
-.checkbox-cell.is-selected::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 3px;
-    background-color: rgb(46, 132, 74);
-}
-
-/* Percentage Input Styles */
-.percentage-input-wrapper {
-    display: flex;
-    align-items: center;
-    margin-top: 0.5rem;
-}
-
-.percentage-input {
-    max-width: 80px;
-}
-
-.percentage-input input {
-    text-align: center;
-    padding: 0.25rem;
-}
-
-/* Commission Amount Display */
-.commission-amount {
-    margin-top: 0.25rem;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: rgb(46, 132, 74);
-}
-
-/* Product Row Styles */
-.product-header {
-    font-weight: 600;
+/* Product Column Styling */
+.product-column {
+    min-width: 200px;
+    max-width: 250px;
+    background-color: rgb(250, 250, 249);
     position: sticky;
     left: 0;
-    background-color: white;
     z-index: 5;
-    min-width: 200px;
-}
-
-.product-header.is-sticky {
-    box-shadow: 2px 0 4px rgba(0,0,0,0.1);
+    border-right: 2px solid rgb(221, 219, 218) !important;
 }
 
 .product-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
+    padding: 0.5rem 0;
 }
 
 .product-name {
     font-weight: 600;
-    color: rgb(22, 50, 92);
+    color: rgb(62, 62, 60);
+    margin-bottom: 0.25rem;
 }
 
 .product-details {
     font-size: 0.75rem;
-    color: rgb(107, 109, 112);
-}
-
-.margin-badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.125rem 0.5rem;
-    background-color: rgb(243, 252, 246);
-    color: rgb(46, 132, 74);
-    border-radius: 0.75rem;
-    font-weight: 600;
-    font-size: 0.75rem;
-}
-
-/* Summary Panel Styles */
-.summary-card {
-    background: linear-gradient(135deg, rgb(250, 250, 249) 0%, white 100%);
-    border: 1px solid rgb(221, 219, 218);
-    border-radius: 0.5rem;
-    padding: 1.5rem;
-    position: relative;
-    overflow: hidden;
-}
-
-.summary-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 4px;
-    height: 100%;
-    background: linear-gradient(180deg, rgb(0, 112, 210) 0%, rgb(1, 68, 134) 100%);
-}
-
-.summary-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.5rem 0;
-    border-bottom: 1px solid rgb(236, 235, 234);
-}
-
-.summary-item:last-child {
-    border-bottom: none;
-    padding-top: 1rem;
-    margin-top: 0.5rem;
-    border-top: 2px solid rgb(221, 219, 218);
-}
-
-.summary-label {
-    color: rgb(107, 109, 112);
-    font-size: 0.875rem;
-    font-weight: 400;
-}
-
-.summary-value {
-    font-size: 1.125rem;
-    font-weight: 700;
-    color: rgb(22, 50, 92);
-}
-
-.summary-value.total-amount {
-    color: rgb(46, 132, 74);
-    font-size: 1.5rem;
-}
-
-/* Action Button Styles */
-.generate-button {
-    min-width: 200px;
-    height: 48px;
-    font-size: 1rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.0625rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    transition: all 0.2s ease;
-}
-
-.generate-button:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-}
-
-/* Loading & Processing States */
-.processing-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(255, 255, 255, 0.9);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 100;
-}
-
-.processing-message {
-    margin-top: 1rem;
-    font-size: 0.875rem;
-    color: rgb(107, 109, 112);
-    text-align: center;
-}
-
-/* Duplicate Options Modal */
-.duplicate-modal {
-    animation: slideIn 0.3s ease-out;
-}
-
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.duplicate-options-card {
-    background-color: white;
-    border-radius: 0.5rem;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-    padding: 2rem;
-}
-
-/* Empty State Styles */
-.empty-state {
-    padding: 3rem;
-    text-align: center;
-}
-
-.empty-state-icon {
-    margin-bottom: 1.5rem;
-    opacity: 0.5;
-}
-
-.empty-state-title {
-    color: rgb(62, 62, 60);
+    color: rgb(115, 115, 115);
     margin-bottom: 0.5rem;
 }
 
-.empty-state-message {
-    color: rgb(107, 109, 112);
-    max-width: 400px;
-    margin: 0 auto;
+.margin-badge {
+    display: inline-block;
+    background-color: rgb(243, 252, 246);
+    color: rgb(46, 132, 74);
+    padding: 0.125rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+/* Team Member Column */
+.team-member-column {
+    min-width: 180px;
+    max-width: 220px;
+    text-align: center;
+}
+
+/* Commission Cell Styling */
+.commission-cell {
+    transition: all 0.2s ease;
+    border-radius: 0.25rem;
+    margin: 0.25rem;
+    padding: 0.75rem 0.5rem !important;
+}
+
+.commission-cell:hover {
+    background-color: rgb(250, 250, 249);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Selected Cell Styling */
+.commission-cell.selected {
+    background-color: rgb(243, 252, 246);
+    border: 1px solid rgb(46, 132, 74);
+    box-shadow: 0 0 0 1px rgb(46, 132, 74);
+}
+
+/* Checkbox Styling */
+.commission-cell lightning-input[type="checkbox"] {
+    margin-bottom: 0.5rem;
+}
+
+/* Percentage Input Styling */
+.percentage-input {
+    max-width: 80px !important;
+}
+
+.percentage-input input {
+    text-align: center !important;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.percentage-input input:focus {
+    border-color: rgb(21, 137, 238);
+    box-shadow: 0 0 0 2px rgb(243, 248, 254);
+}
+
+/* Commission Amount Display */
+.commission-amount {
+    font-weight: 700;
+    color: rgb(46, 132, 74);
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+}
+
+/* Select All Checkboxes */
+.slds-text-body_small + lightning-input[type="checkbox"] {
+    margin-left: 0.5rem;
+}
+
+/* Header Team Member Styling */
+.team-member-column .slds-text-heading_small {
+    color: rgb(62, 62, 60);
+    margin-bottom: 0.25rem;
+}
+
+/* Row Hover Effects */
+.commission-matrix .slds-table tbody tr:hover {
+    background-color: rgb(250, 250, 249);
+}
+
+.commission-matrix .slds-table tbody tr:hover .product-column {
+    background-color: rgb(247, 247, 247);
+}
+
+/* Summary Card Enhancements */
+.slds-box.slds-theme_shade {
+    background: linear-gradient(135deg, rgb(243, 252, 246) 0%, rgb(250, 250, 249) 100%);
+    border: 1px solid rgb(221, 219, 218);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.summary-card h3 {
+    color: rgb(46, 132, 74);
+    font-weight: 700;
+}
+
+/* Total Amount Highlighting */
+.slds-text-color_success strong {
+    font-size: 1.25rem;
+    font-weight: 800;
+}
+
+/* Generate Button Styling */
+.generate-button {
+    min-width: 200px;
+    font-weight: 700;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.generate-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Processing State */
+.processing-message {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .matrix-container {
-        max-height: 400px;
+    .commission-matrix {
+        font-size: 0.75rem;
     }
     
-    .summary-card {
-        margin-bottom: 1rem;
+    .team-member-column {
+        min-width: 150px;
+        max-width: 180px;
     }
     
-    .generate-button {
-        width: 100%;
+    .product-column {
+        min-width: 180px;
+        max-width: 220px;
+    }
+    
+    .percentage-input {
+        max-width: 70px !important;
     }
 }
 
-/* Animation Classes */
-.fade-in {
-    animation: fadeIn 0.3s ease-out;
+/* Loading State Enhancements */
+.slds-spinner_container {
+    background-color: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(2px);
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+/* Error State Styling */
+.slds-notification_alert--error {
+    border-left: 4px solid rgb(194, 57, 52);
 }
 
-.slide-up {
-    animation: slideUp 0.3s ease-out;
+/* Modal Enhancements */
+.duplicate-modal .slds-modal__container {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    border-radius: 0.5rem;
 }
 
-@keyframes slideUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
+/* Form Input Focus States */
+lightning-input input:focus,
+lightning-input select:focus {
+    border-color: rgb(21, 137, 238) !important;
+    box-shadow: 0 0 0 2px rgb(243, 248, 254) !important;
+}
+
+/* Visual Hierarchy Improvements */
+h1.slds-text-heading_medium {
+    color: rgb(62, 62, 60);
+    font-weight: 700;
+}
+
+/* Accessibility Improvements */
+.commission-cell:focus-within {
+    outline: 2px solid rgb(21, 137, 238);
+    outline-offset: 2px;
+}
+
+/* Print Styles */
+@media print {
+    .generate-button,
+    .processing-message {
+        display: none;
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
+    
+    .commission-matrix .slds-table {
+        font-size: 0.75rem;
+    }
+    
+    .commission-cell {
+        border: 1px solid #000 !important;
     }
 }
 
-/* Status Indicators */
-.status-badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.25rem 0.75rem;
-    border-radius: 1rem;
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.0625rem;
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+    .commission-cell.selected {
+        border: 2px solid #000;
+    }
+    
+    .margin-badge {
+        border: 1px solid #000;
+    }
 }
 
-.status-badge.draft {
-    background-color: rgb(254, 241, 214);
-    color: rgb(169, 100, 0);
+/* Animation for Select All Actions */
+.commission-cell.selecting {
+    animation: selectPulse 0.3s ease-out;
 }
 
-.status-badge.approved {
-    background-color: rgb(213, 236, 254);
-    color: rgb(0, 68, 158);
-}
-
-.status-badge.paid {
-    background-color: rgb(243, 252, 246);
-    color: rgb(46, 132, 74);
-}
-
-/* Hover Effects */
-.hover-highlight:hover {
-    background-color: rgb(250, 250, 249);
-    transition: background-color 0.15s ease;
-}
-
-/* Focus States */
-.percentage-input input:focus {
-    outline: 0;
-    border-color: rgb(0, 112, 210);
-    box-shadow: 0 0 3px rgb(0, 112, 210, 0.3);
-}
-
-/* Utility Classes */
-.truncate-text {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.no-wrap {
-    white-space: nowrap;
-}
-
-.sticky-column {
-    position: sticky;
-    left: 0;
-    background-color: white;
-    z-index: 5;
+@keyframes selectPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
 }
