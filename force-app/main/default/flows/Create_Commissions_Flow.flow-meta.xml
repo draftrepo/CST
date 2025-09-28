@@ -5,14 +5,26 @@
     <environments>Default</environments>
     <interviewLabel>Create Commissions Flow {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Create Commissions Flow</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
     <processType>Flow</processType>
     <screens>
         <name>Commission_Creation_Screen</name>
         <label>Create Commission Records</label>
-        <locationX>176</locationX>
-        <locationY>278</locationY>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
         <allowBack>true</allowBack>
-        <allowFinish>true</allowFinish>
+        <allowFinish>false</allowFinish>
         <allowPause>false</allowPause>
         <connector>
             <targetReference>Success_Screen</targetReference>
@@ -24,14 +36,27 @@
             <inputParameters>
                 <name>opportunityId</name>
                 <value>
-                    <elementReference>OpportunityId</elementReference>
+                    <elementReference>recordId</elementReference>
                 </value>
             </inputParameters>
-            <isRequired>false</isRequired>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
             <outputParameters>
                 <assignToReference>CreatedCommissionsCount</assignToReference>
                 <name>commissionsCreated</name>
             </outputParameters>
+            <outputParameters>
+                <assignToReference>recordId</assignToReference>
+                <name>opportunityId</name>
+            </outputParameters>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
         </fields>
         <showFooter>true</showFooter>
         <showHeader>true</showHeader>
@@ -39,27 +64,42 @@
     <screens>
         <name>Success_Screen</name>
         <label>Commission Creation Complete</label>
-        <locationX>176</locationX>
-        <locationY>518</locationY>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
         <fields>
             <name>Success_Message</name>
-            <fieldText>&lt;p&gt;&lt;span style="color: rgb(68, 133, 0);"&gt;✓ Success!&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Created {!CreatedCommissionsCount} commission records for this opportunity.&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;You can view and manage these commissions from the Opportunity's related list or the Commissions tab.&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;&lt;span style=&quot;color: rgb(68, 133, 0);&quot;&gt;✓ Success!&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Created {!CreatedCommissionsCount} commission records for this opportunity.&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;You can view and manage these commissions from the Opportunity&apos;s related list or the Commissions tab.&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
         </fields>
         <showFooter>true</showFooter>
         <showHeader>true</showHeader>
     </screens>
     <start>
-        <locationX>50</locationX>
+        <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Commission_Creation_Screen</targetReference>
         </connector>
     </start>
-    <status>Draft</status>
+    <status>Active</status>
+    <variables>
+        <name>CreatedCommissionsCount</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
     <variables>
         <name>OpportunityId</name>
         <dataType>String</dataType>
@@ -68,10 +108,10 @@
         <isOutput>false</isOutput>
     </variables>
     <variables>
-        <name>CreatedCommissionsCount</name>
+        <name>recordId</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
-        <isInput>false</isInput>
+        <isInput>true</isInput>
         <isOutput>false</isOutput>
     </variables>
 </Flow>
