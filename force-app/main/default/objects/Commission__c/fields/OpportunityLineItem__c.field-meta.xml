@@ -3,13 +3,12 @@
     <fullName>OpportunityLineItem__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <description>The opportunity product this commission is based on</description>
-    <externalId>false</externalId>
     <label>Opportunity Product</label>
     <referenceTo>OpportunityLineItem</referenceTo>
     <relationshipLabel>Commissions</relationshipLabel>
     <relationshipName>Commissions</relationshipName>
     <required>false</required>
-    <trackHistory>false</trackHistory>
+    <trackHistory>true</trackHistory>
     <trackTrending>false</trackTrending>
     <type>Lookup</type>
 </CustomField>

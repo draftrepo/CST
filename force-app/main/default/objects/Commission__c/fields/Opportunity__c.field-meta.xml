@@ -3,7 +3,6 @@
     <fullName>Opportunity__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <description>The opportunity this commission is linked to</description>
-    <externalId>false</externalId>
     <label>Opportunity</label>
     <referenceTo>Opportunity</referenceTo>
     <relationshipLabel>Commissions</relationshipLabel>

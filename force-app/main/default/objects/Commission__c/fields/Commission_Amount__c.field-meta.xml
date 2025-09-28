@@ -2,7 +2,6 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Commission_Amount__c</fullName>
     <description>The calculated commission amount in currency</description>
-    <externalId>false</externalId>
     <formula>OpportunityLineItem__r.Line_Margin__c * Commission_Percentage__c</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <inlineHelpText>Automatically calculated: Line Margin × Commission Percentage</inlineHelpText>
